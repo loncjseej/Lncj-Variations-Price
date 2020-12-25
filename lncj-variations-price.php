@@ -41,16 +41,26 @@ function lncj_attr_price(){
                 $i = 0;
                 $checked = '';
                 $active = '';
-                foreach($product->get_available_variations() as $variation ){
-                    if( $i == 0 ){
-                        $checked =  " checked='checked'";
-                        $active = "active";
-                    }else{
-                        $checked = "";
-                        $active = "";
+                foreach( $product->get_available_variations() as $variation ){
+                    if ( ! empty( $args['selected'] ) ){
+                        if ( $args['selected'] == $variation['attributes'][$name] ){
+                            $checked =  "checked";
+                            $active = "active";
+                        }else {
+                            $active = "";
+                            $checked =  "";
+                        }
+                    }else {
+                        if ( $i == 0 ) {
+                            $checked = "checked";
+                            $active = "active";
+                        }else {
+                            $checked = "";
+                            $active = "";
+                        }
                     }
                     $term = get_term_by('slug', $variation['attributes'][$name], $id);
-                    $radio .= '<div class="item-variation ' . $active . '"><div class="in"><input ' .$checked. ' id="' . $id . '" data-attribute_name="' . $name . '" type="radio" name="' . $name . '" value="' . esc_attr( $variation['attributes'][$name] ) . '" ' . checked( sanitize_title( $args['selected'] ), $variation['attributes'][$name], false ) . '>' . esc_html( apply_filters( 'woocommerce_variation_option_name_woo_attr', $term->name, $term, $attribute, $product ) );
+                    $radio .= '<div class="item-variation ' . $active . '"><div class="in"><input ' .$checked. ' id="' . $id . '" data-attribute_name="' . $name . '" type="radio" name="' . $name . '" value="' . esc_attr( $variation['attributes'][$name] ) . '" >' . esc_html( apply_filters( 'woocommerce_variation_option_name_woo_attr', $term->name, $term, $attribute, $product ) );
                     $radio .= '<label>' . wc_price($variation['display_price']) . '</label></div></div>';
                     $i ++;
                 }
